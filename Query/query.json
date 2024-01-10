@@ -1,0 +1,12 @@
+{
+  "Select": {
+    "What": ["Name"],
+    "From": { "Table": ["Users"] },
+    "Where": {
+      "=": [
+        ["Name", ""],
+        ["Password", ""]
+      ]
+    }
+  }
+}

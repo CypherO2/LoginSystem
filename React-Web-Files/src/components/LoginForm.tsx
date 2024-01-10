@@ -21,7 +21,7 @@ function LoginForm() {
     setResponseText("");
 
     try {
-      const response = await axios.post("https://localhost:5000/login", {
+      const response = await axios.post("http://localhost:5000/login", {
         username: username,
         password: password,
       });
@@ -55,10 +55,10 @@ function LoginForm() {
 
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="" controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
+                    <Form.Label>Username</Form.Label>
                     <Form.Control
                       id="username"
-                      type="email"
+                      type="text"
                       placeholder="Enter email"
                       onChange={(e) => setUsername(e.target.value)}
                     />
@@ -83,7 +83,7 @@ function LoginForm() {
                     Login
                   </Button>
                   {responseText && (
-                    <p className="text-danger">Response: {responseText}</p>
+                    <p className="text-white">Response: {responseText}</p>
                   )}
                 </Form>
               </MDBCardBody>

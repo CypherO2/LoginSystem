@@ -1,18 +1,40 @@
-import { useContext } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { ThemeContext } from "./ThemeProvider";
 import {
-  MDBBtn,
   MDBContainer,
   MDBRow,
   MDBCol,
   MDBCard,
   MDBCardBody,
-  MDBInput,
-  MDBIcon,
 } from "mdb-react-ui-kit";
 import { Button, Col, Form, Row } from "react-bootstrap";
+import axios from "axios";
 function LoginForm() {
   const themeContext = useContext(ThemeContext);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [responseText, setResponseText] = useState("");
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setResponseText("");
+
+    try {
+      const response = await axios.post("https://localhost:5000/login", {
+        username: username,
+        password: password,
+      });
+      setResponseText(JSON.stringify(response.data));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setResponseText(error.message);
+      } else {
+        setResponseText(String(error));
+      }
+    }
+  };
+
   return (
     <>
       <Row>
@@ -31,14 +53,24 @@ function LoginForm() {
                   Please enter your login and password!
                 </p>
 
-                <Form>
+                <Form onSubmit={handleSubmit}>
                   <Form.Group className="" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" />
+                    <Form.Control
+                      id="username"
+                      type="email"
+                      placeholder="Enter email"
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
+                    <Form.Control
+                      id="password"
+                      type="password"
+                      placeholder="Password"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Remember Me" />
@@ -50,6 +82,9 @@ function LoginForm() {
                   >
                     Login
                   </Button>
+                  {responseText && (
+                    <p className="text-danger">Response: {responseText}</p>
+                  )}
                 </Form>
               </MDBCardBody>
             </MDBCard>

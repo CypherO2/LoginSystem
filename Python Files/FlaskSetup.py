@@ -23,3 +23,6 @@ def get_staff():
 if __name__ == "__main__":
     # app ( see Line 10 ) . run (0 variables)
     app.run()
+
+if __name__ == "__main__":
+    app.run(ssl_context='adhoc')

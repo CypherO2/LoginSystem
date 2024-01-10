@@ -1,4 +1,4 @@
-#Import
+# Import
 import sqlite3
 from sqlite3 import Error
 import datetime
@@ -7,9 +7,11 @@ import pandas as pd
 import json as J
 import flask as F
 from flask import jsonify
+
 # -------------------------- #
 
-#Functions
+# Functions
+
 
 def jsonCheck():
     with open("../Query/query.json") as jsonFile:
@@ -72,5 +74,6 @@ def JsonFile(result):
     with open("jsonResults.json", "r") as testFile:
         jsonDict2 = J.load(testFile)
         print(jsonDict2)
+
 
 # -------------------------- #

@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import cryptography
 from bcrypt import checkpw, gensalt, hashpw
 # import LoginFunctions as LF
 import sqlite3
@@ -11,15 +12,20 @@ app = Flask(__name__)
 # CORS function from flask_cors : (see line 10), resource = {regex"anywhere/thing" : {(data can be sent from anywhere)}}
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-logins = {}
+
 @app.route("/login", methods=["POST"])
 def login_details():
+    logins = {}
     print("Request Recieved")
     with sqlite3.connect(
         r"\\scc-fs-hf4\Students$\stu2223\S301389\Year2 Py\Project\LoginSystem\Database Files\LoginSignup.db"
     ) as conn:
         print("Connection Established")
         username = request.json.get("username")
+        if len(username) < 5:
+            return jsonify({"success": False, "message": "Username is not long enough"})
+        elif len(username) > 16:
+            return jsonify({"success": False, "message": "Username is to long"})
         # print(username)
         password = request.json.get("password").encode("utf-8")
         try:
@@ -28,13 +34,13 @@ def login_details():
             query = """Select * From users Where Username = ?"""
             cu.execute(query, (username,))
             results = cu.fetchall()
-            # print(results)
+            print(results)
             for i in results:
                 logins[i[3]] = i[4]
                 print(logins)
                 print(logins[username])
-            if checkpw(password == logins[username]):
-                return jsonify({"success":True, "message": "Login Successful"})
+            if checkpw(password, logins[username]):
+                return jsonify({"success":True, "message": "Login Successful", "Festive Message": "Blessed Yuletide"})
             else:
                 return jsonify({"success":False, "message": "Incorrect Login Details"}),400
         except Exception as e:
@@ -62,7 +68,7 @@ def signup_details():
                 statement = """INSERT INTO users(Name, DOB, Username, Password) VALUES(?,?,?,?)"""
                 cu.execute(statement,(name, dob, username, hashedPassword))
                 conn.commit()
-                return jsonify({"success": True, "message": "Signup Successful"})
+                return jsonify({"success": True, "message": "Signup Successful", "Festive Message": "Blessed Yuletide"})
             except:
                 print("Value could not be added to DB")
                 return jsonify({"success": False, "message": "Internal Server Error"}),500

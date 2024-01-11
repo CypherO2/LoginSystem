@@ -27,7 +27,12 @@ def login_details():
         elif len(username) > 16:
             return jsonify({"success": False, "message": "Username is to long"})
         # print(username)
-        password = request.json.get("password").encode("utf-8")
+        password = request.json.get("password")
+        if len(password) < 5:
+            return jsonify({"success": False, "message": "Password Not Long Enough"})
+        elif len(password) > 16:
+            return jsonify({"success": False, "message":"Password to Long"})
+        password = password.encode("utf-8")
         try:
             cu = conn.cursor()
             print("Cursor Created")
@@ -57,8 +62,13 @@ def signup_details():
         name = request.json.get("name")
         dob = request.json.get("dob")
         username = request.json.get("username")
-        password = request.json.get("password").encode("utf-8")
-        confirmPass = request.json.get("confirmPass").encode("utf-8")
+        password = request.json.get("password")
+        if len(password) < 5:
+            return jsonify({"success": False, "message": "Password Not Long Enough"})
+        elif len(password) > 16:
+            return jsonify({"success": False, "message":"Password to Long"})
+        password = password.encode("utf-8")
+        confirmPass = request.json.get("confirmPass")
         if password == confirmPass:
             salt = gensalt()
             hashedPassword = hashpw(password, salt)
@@ -74,6 +84,7 @@ def signup_details():
                 return jsonify({"success": False, "message": "Internal Server Error"}),500
         else:
             return jsonify({"success": False, "message": "Passwords Do NOT Match"}),400
+
 
 # # if name == main ( proper industry practice )
 # if __name__ == "__main__":

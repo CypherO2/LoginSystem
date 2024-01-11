@@ -21,7 +21,7 @@ function LoginForm() {
     setResponseText("");
 
     try {
-      const response = await axios.post("https://localhost:5000/login", {
+      const response = await axios.post("http://localhost:5000/login", {
         username: username,
         password: password,
       });

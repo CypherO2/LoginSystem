@@ -24,7 +24,7 @@ function SignupForm() {
     setResponseText("");
 
     try {
-      const response = await axios.post("http://localhost:5000/signup", {
+      const response = await axios.post("https://localhost:5000/signup", {
         name: name,
         dob: dob,
         username: username,

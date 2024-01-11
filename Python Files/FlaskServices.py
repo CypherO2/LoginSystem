@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
+from bcrypt import checkpw, gensalt, hashpw
 # import LoginFunctions as LF
 import sqlite3
 from sqlite3 import Error
@@ -16,12 +16,12 @@ logins = {}
 def login_details():
     print("Request Recieved")
     with sqlite3.connect(
-        r"\\scc-fs-hf4\Students$\stu2223\S301389\Year2 Py\Project\LoginSystem\Database Files\CustomerStaffLogin.db"
+        r"\\scc-fs-hf4\Students$\stu2223\S301389\Year2 Py\Project\LoginSystem\Database Files\LoginSignup.db"
     ) as conn:
         print("Connection Established")
         username = request.json.get("username")
         # print(username)
-        password = request.json.get("password")
+        password = request.json.get("password").encode("utf-8")
         try:
             cu = conn.cursor()
             print("Cursor Created")
@@ -33,12 +33,11 @@ def login_details():
                 logins[i[3]] = i[4]
                 print(logins)
                 print(logins[username])
-            if password == logins[username]:
+            if checkpw(password == logins[username]):
                 return jsonify({"success":True, "message": "Login Successful"})
             else:
                 return jsonify({"success":False, "message": "Incorrect Login Details"}),400
         except Exception as e:
-
             print(e)
             return jsonify({"success": False, "message": "Incorrect Login Details"}), 400
 
@@ -46,20 +45,22 @@ def login_details():
 def signup_details():
     print("Request Recieved")
     with sqlite3.connect(
-        r"\\scc-fs-hf4\Students$\stu2223\S301389\Year2 Py\Project\LoginSystem\Database Files\CustomerStaffLogin.db"
+        r"\\scc-fs-hf4\Students$\stu2223\S301389\Year2 Py\Project\LoginSystem\Database Files\LoginSignup.db"
     ) as conn:
         print("Connection Established")
         name = request.json.get("name")
         dob = request.json.get("dob")
         username = request.json.get("username")
-        password = request.json.get("password")
-        confirmPass = request.json.get("confirmPass")
+        password = request.json.get("password").encode("utf-8")
+        confirmPass = request.json.get("confirmPass").encode("utf-8")
         if password == confirmPass:
+            salt = gensalt()
+            hashedPassword = hashpw(password, salt)
             try:
                 cu = conn.cursor()
                 print("Cursor Created")
                 statement = """INSERT INTO users(Name, DOB, Username, Password) VALUES(?,?,?,?)"""
-                cu.execute(statement,(name, dob, username, password))
+                cu.execute(statement,(name, dob, username, hashedPassword))
                 conn.commit()
                 return jsonify({"success": True, "message": "Signup Successful"})
             except:
@@ -68,10 +69,11 @@ def signup_details():
         else:
             return jsonify({"success": False, "message": "Passwords Do NOT Match"}),400
 
-# if name == main ( proper industry practice )
-if __name__ == "__main__":
-    # app ( see Line 10 ) . run (0 variables)
-    app.run()
-
+# # if name == main ( proper industry practice )
 # if __name__ == "__main__":
-#     app.run(ssl_context="adhoc")
+#     # app ( see Line 10 ) . run (0 variables)
+#     app.run()
+#     #ssl_context="adhoc"
+
+if __name__ == "__main__":
+    app.run(ssl_context="adhoc")

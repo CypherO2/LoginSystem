@@ -26,6 +26,20 @@ function SignupForm() {
       setResponseText("Username Not Alphanumeric");
       return;
     }
+    if (password !== confirmPass) {
+      setResponseText("Passwords Do Not Match");
+      return;
+    }
+    if (
+      !password.match(
+        /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9@#$%^_&-+=]+){8,16}$/
+      )
+    ) {
+      setResponseText(
+        "Password Must Contain:\n- 1 Uppercase Character\n- 1 Lowercase Character\n- 1 Number"
+      );
+      return;
+    }
 
     try {
       const response = await axios.post("http://localhost:5000/signup", {
@@ -33,7 +47,6 @@ function SignupForm() {
         dob: dob,
         username: username,
         password: password,
-        confirmPass: confirmPass,
       });
       setResponseText(JSON.stringify(response.data));
     } catch (error) {

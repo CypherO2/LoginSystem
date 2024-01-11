@@ -18,11 +18,13 @@ def login_details():
     with sqlite3.connect(
         r"\\scc-fs-hf4\Students$\stu2223\S301389\Year2 Py\Project\LoginSystem\Database Files\CustomerStaffLogin.db"
     ) as conn:
+        print("Connection Established")
         username = request.json.get("username")
         # print(username)
         password = request.json.get("password")
         try:
             cu = conn.cursor()
+            print("Cursor Created")
             query = """Select * From users Where Username = ?"""
             cu.execute(query, (username,))
             results = cu.fetchall()
@@ -38,8 +40,33 @@ def login_details():
         except Exception as e:
 
             print(e)
-            return jsonify({"sucess": False, "message": "Incorrect Login Details"}), 400
+            return jsonify({"success": False, "message": "Incorrect Login Details"}), 400
 
+@app.route("/signup", methods=["POST"])
+def signup_details():
+    print("Request Recieved")
+    with sqlite3.connect(
+        r"\\scc-fs-hf4\Students$\stu2223\S301389\Year2 Py\Project\LoginSystem\Database Files\CustomerStaffLogin.db"
+    ) as conn:
+        print("Connection Established")
+        name = request.json.get("name")
+        dob = request.json.get("dob")
+        username = request.json.get("username")
+        password = request.json.get("password")
+        confirmPass = request.json.get("confirmPass")
+        if password == confirmPass:
+            try:
+                cu = conn.cursor()
+                print("Cursor Created")
+                statement = """INSERT INTO users(Name, DOB, Username, Password) VALUES(?,?,?,?)"""
+                cu.execute(statement,(name, dob, username, password))
+                conn.commit()
+                return jsonify({"success": True, "message": "Signup Successful"})
+            except:
+                print("Value could not be added to DB")
+                return jsonify({"success": False, "message": "Internal Server Error"}),500
+        else:
+            return jsonify({"success": False, "message": "Passwords Do NOT Match"}),400
 
 # if name == main ( proper industry practice )
 if __name__ == "__main__":

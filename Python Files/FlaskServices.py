@@ -26,6 +26,8 @@ def login_details():
             return jsonify({"success": False, "message": "Username is not long enough"})
         elif len(username) > 16:
             return jsonify({"success": False, "message": "Username is to long"})
+        elif not username.isalnum():
+            return jsonify({"success": False, "message": "Username is Not Alphanumeric"})
         # print(username)
         password = request.json.get("password")
         if len(password) < 5:
@@ -62,6 +64,12 @@ def signup_details():
         name = request.json.get("name")
         dob = request.json.get("dob")
         username = request.json.get("username")
+        if len(username) < 5:
+            return jsonify({"success": False, "message": "Username is not long enough"})
+        elif len(username) > 16:
+            return jsonify({"success": False, "message": "Username is to long"})
+        elif not username.isalnum():
+            return jsonify({"success": False, "message": "Username is Not Alphanumeric"})
         password = request.json.get("password")
         if len(password) < 5:
             return jsonify({"success": False, "message": "Password Not Long Enough"})
@@ -86,11 +94,6 @@ def signup_details():
             return jsonify({"success": False, "message": "Passwords Do NOT Match"}),400
 
 
-# # if name == main ( proper industry practice )
-# if __name__ == "__main__":
-#     # app ( see Line 10 ) . run (0 variables)
-#     app.run()
-#     #ssl_context="adhoc"
-
 if __name__ == "__main__":
-    app.run(ssl_context="adhoc")
+    app.run()
+    #ssl_context="adhoc"

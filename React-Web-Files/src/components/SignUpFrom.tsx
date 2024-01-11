@@ -22,9 +22,13 @@ function SignupForm() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setResponseText("");
+    if (!username.match(/^[0-9a-zA-Z]+$/)) {
+      setResponseText("Username Not Alphanumeric");
+      return;
+    }
 
     try {
-      const response = await axios.post("https://localhost:5000/signup", {
+      const response = await axios.post("http://localhost:5000/signup", {
         name: name,
         dob: dob,
         username: username,

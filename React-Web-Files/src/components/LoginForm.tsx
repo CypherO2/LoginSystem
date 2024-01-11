@@ -75,16 +75,30 @@ function LoginForm() {
                   <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Remember Me" />
                   </Form.Group>
-                  <Button
-                    variant="dark"
-                    type="submit"
-                    className="border border-light"
-                  >
-                    Login
-                  </Button>
+                  <Row>
+                    <Col className="d-grid gap-2">
+                      <Button
+                        variant="dark"
+                        type="submit"
+                        className="border border-light "
+                      >
+                        Login
+                      </Button>
+                    </Col>
+                  </Row>
                   {responseText && (
                     <p className="text-white">Response: {responseText}</p>
                   )}
+                  <Row>
+                    <Col>
+                      <p>
+                        Don't have an account?{" "}
+                        <a href="/signup" className="text-primary">
+                          Create one
+                        </a>
+                      </p>
+                    </Col>
+                  </Row>
                 </Form>
               </MDBCardBody>
             </MDBCard>

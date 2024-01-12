@@ -11,7 +11,7 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import axios from "axios";
 function LoginForm() {
   const themeContext = useContext(ThemeContext);
-
+  const [showPass, setShowPass] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [responseText, setResponseText] = useState("");
@@ -43,6 +43,7 @@ function LoginForm() {
       }
   };
 
+
   return (
     <>
       <Row>
@@ -73,15 +74,23 @@ function LoginForm() {
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      id="password"
-                      type="password"
-                      placeholder="Password"
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
+                    <Row>
+                      <Col>
+                        <Form.Control
+                          id="password"
+                          type={showPass ? "text" : "password"}
+                          placeholder="Password"
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                      </Col>
+                    </Row>
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Remember Me" />
+                    <Form.Check
+                      type="checkbox"
+                      label="Show Password"
+                      onChange={() => setShowPass((prev) => !prev)}
+                    />
                   </Form.Group>
                   <Row>
                     <Col className="d-grid gap-2">
@@ -116,4 +125,5 @@ function LoginForm() {
     </>
   );
 }
+
 export default LoginForm;

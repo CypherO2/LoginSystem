@@ -11,7 +11,7 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import axios from "axios";
 function SignupForm() {
   const themeContext = useContext(ThemeContext);
-
+  const [showPass, setShowPass] = useState(false);
   const [username, setUsername] = useState("");
   const [dob, setDOB] = useState("");
   const [password, setPassword] = useState("");
@@ -108,7 +108,7 @@ function SignupForm() {
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                       id="password"
-                      type="password"
+                      type={showPass ? "text" : "password"}
                       placeholder="Password"
                       onChange={(e) => setPassword(e.target.value)}
                     />
@@ -117,9 +117,16 @@ function SignupForm() {
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control
                       id="password"
-                      type="password"
+                      type={showPass ? "text" : "password"}
                       placeholder="Confirm Password"
                       onChange={(e) => setConfirmPass(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                    <Form.Check
+                      type="checkbox"
+                      label="Show Password"
+                      onChange={() => setShowPass((prev) => !prev)}
                     />
                   </Form.Group>
                   <Row>
@@ -133,6 +140,7 @@ function SignupForm() {
                       </Button>
                     </Col>
                   </Row>
+
                   {responseText && (
                     <p className="text-white">Response: {responseText}</p>
                   )}

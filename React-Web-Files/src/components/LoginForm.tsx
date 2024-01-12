@@ -19,20 +19,28 @@ function LoginForm() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setResponseText("");
-
-    try {
-      const response = await axios.post("http://localhost:5000/login", {
-        username: username,
-        password: password,
-      });
-      setResponseText(JSON.stringify(response.data));
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setResponseText(error.message);
-      } else {
-        setResponseText(String(error));
-      }
+    if (!username.match(/^[0-9a-zA-Z]+$/)) {
+      setResponseText("Username Not Alphanumeric");
+      return;
     }
+    if (
+      !password.match(
+        /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9@#$%^_&-+=]+){8,16}$/
+      )
+    )
+      try {
+        const response = await axios.post("http://localhost:5000/login", {
+          username: username,
+          password: password,
+        });
+        setResponseText(JSON.stringify(response.data));
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          setResponseText(error.message);
+        } else {
+          setResponseText(String(error));
+        }
+      }
   };
 
   return (

@@ -13,7 +13,13 @@ app = Flask(__name__)
 # CORS function from flask_cors : (see line 10), resource = {regex"anywhere/thing" : {(data can be sent from anywhere)}}
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-
+def PasswordCheck(password):
+    passwordPattern = r"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9@#$%^_&-+=]+){5,16}$"
+    if re.match(passwordPattern, password) != None:
+        return True
+    else:
+        return False
+    
 @app.route("/login", methods=["POST"])
 def login_details():
     logins = {}
@@ -35,7 +41,10 @@ def login_details():
             return jsonify({"success": False, "message": "Password Not Long Enough"})
         elif len(password) > 16:
             return jsonify({"success": False, "message":"Password to Long"})
-        password = password.encode("utf-8")
+        if PasswordCheck(password):
+            password = password.encode("utf-8")
+        else:
+            return jsonify({"success": False, "message": "Password Must Contain:\n- 1 Uppercase Character\n- 1 Lowercase Character\n- 1 Number"})
         try:
             cu = conn.cursor()
             print("Cursor Created")
@@ -50,10 +59,10 @@ def login_details():
             if checkpw(password, logins[username]):
                 return jsonify({"success":True, "message": "Login Successful", "Festive Message": "Blessed Yuletide"})
             else:
-                return jsonify({"success":False, "message": "Incorrect Login Details"}),400
+                return jsonify({"success":False, "message": "Incorrect Login Details"})
         except Exception as e:
             print(e)
-            return jsonify({"success": False, "message": "Incorrect Login Details"}), 400
+            return jsonify({"success": False, "message": "Incorrect Login Details"})
 
 @app.route("/signup", methods=["POST"])
 def signup_details():
@@ -84,7 +93,10 @@ def signup_details():
             return jsonify({"success": False, "message": "Password Not Long Enough"})
         elif len(password) > 16:
             return jsonify({"success": False, "message":"Password to Long"})
-        password = password.encode("utf-8")
+        if PasswordCheck(password):
+            password = password.encode("utf-8")
+        else:
+            return jsonify({"success": False, "message": "Password Must Contain:\n- 1 Uppercase Character\n- 1 Lowercase Character\n- 1 Number"})
         # confirmPass = request.json.get("confirmPass").encode("utf-8")
         # if password == confirmPass:
         salt = gensalt()

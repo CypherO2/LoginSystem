@@ -1,6 +1,6 @@
 # LoginSystem
 College Winter Project based on using a react website to operate through a python + FLASK backend w/ an SQLite3 database for customer log-in/sign-up utilizing password encryption (Hashing)
-
+https://github.com/Ileriayo/markdown-badges?tab=readme-ov-file#social
 Step 1: Design React Webpage + Alternatives & Redirects ( In this case utilising React-Bootstrap, Bootstrap AND other Bootstrap additions/ alternatives )
 
 Step 2: Build SELECT, DELETE, INPUT, ETC Functions for Python Backend [1]
